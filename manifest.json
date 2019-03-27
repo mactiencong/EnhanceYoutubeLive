@@ -1,0 +1,25 @@
+{
+  "manifest_version": 2,
+  "name": "Enhance Youtube Live",
+  "short_name": "Enhance Youtube Live",
+  "description": "Enhance Youtube Live",
+  "version": "1.0.1",
+  "author": "matico",
+  "permissions": [
+    "webRequest", 
+    "webRequestBlocking",
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+        "js/background.js"
+    ],
+    "persistent": true
+  },
+  "web_accessible_resources": [
+    "data/*.json"
+  ],
+  "browser_action":{
+    "default_icon": "logo.png"
+  }
+}
