@@ -8,6 +8,7 @@
   "permissions": [
     "webRequest", 
     "webRequestBlocking",
+    "webNavigation",
     "<all_urls>"
   ],
   "background": {
@@ -20,6 +21,6 @@
     "data/*.json"
   ],
   "browser_action":{
-    "default_icon": "logo.png"
+    "default_icon": "icon/enable.png"
   }
 }

@@ -1,7 +1,7 @@
-let isEnable = true
+let isEnable = false
 
 function start(){
-  chrome.browserAction.onClicked.addListener(function(tab) {
+  chrome.browserAction.onClicked.addListener(() => {
     if(isEnable) {
         disable()
     } else enable()
@@ -9,15 +9,31 @@ function start(){
 }
 
 function enable(){
+  setEnableIcon()
   isEnable = true
-  start()
+  run()
+}
+
+function setEnableIcon(){
+  chrome.browserAction.setIcon({
+      path : "icon/enable.png"
+  })
 }
 
 function disable(){
+  setDisableIcon()
   isEnable = false
-  chrome.webRequest.onBeforeRequest.removeListener(blockListener)
+  stopBlocking()
+  chrome.webNavigation.onCompleted.removeListener(startBlocking)
+  chrome.webNavigation.onBeforeNavigate.removeListener(stopBlocking)
+  clearBlockTimeout()
 }
 
+function setDisableIcon(){
+  chrome.browserAction.setIcon({
+      path : "icon/disable.png"
+  })
+}
 
 let allowUrlPatterns = []
 
@@ -28,19 +44,42 @@ function loadAllowUrlPatterns(){
     .then(patterns => patterns)
 }
 
-function start(){
+function run(){
   loadAllowUrlPatterns().then(data => {
     allowUrlPatterns = data
-    startBlock()
+    registerBlocking()
   })
 }
 
-function startBlock(){
-  chrome.webRequest.onBeforeRequest.addListener(
-    blockListener,
-    {urls: ["<all_urls>"]},
-    ["blocking"]
-  )
+function registerBlocking(){
+  startBlocking()
+  chrome.webNavigation.onCompleted.addListener(startBlocking, { url: [{hostContains: '.youtube.com'}] })
+  chrome.webNavigation.onBeforeNavigate.addListener(stopBlocking, { url: [{hostContains: '.youtube.com'}] })
+}
+
+let blockTimeout = null
+function startBlocking(){
+  clearBlockTimeout()
+  blockTimeout = setTimeout(()=>{
+    chrome.webRequest.onBeforeRequest.addListener(
+      blockListener,
+      {urls: ["<all_urls>"]},
+      ["blocking"]
+    )
+    clearBlockTimeout()
+  }, 3000) // start block after 120s (120000) for loading image, css ...
+}
+
+function stopBlocking(){
+  clearBlockTimeout()
+  chrome.webRequest.onBeforeRequest.removeListener(blockListener)
+}
+
+function clearBlockTimeout(){
+  if(blockTimeout!==null) {
+    clearTimeout(blockTimeout)
+    blockTimeout = null
+  }
 }
 
 function isAllow(details){
@@ -57,4 +96,5 @@ function blockListener(details) {
   }
 }
 
-enable()
+start()
+disable()
