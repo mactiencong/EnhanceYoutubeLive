@@ -36,7 +36,6 @@ function setDisableIcon(){
 }
 
 let allowUrlPatterns = []
-
 function loadAllowUrlPatterns(){
   const url = chrome.runtime.getURL('../data/allowUrlPatterns.json')
   return fetch(url)
