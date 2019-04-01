@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "Enhance Youtube Live",
-  "short_name": "Enhance Youtube Live",
-  "description": "Enhance Youtube Live",
-  "version": "1.0.1",
+  "name": "Enhance Youtube™ Livestream",
+  "short_name": "Enhance Youtube™ Livestream",
+  "description": "Enhance Youtube™ Livestream",
+  "version": "1.0.2",
   "author": "matico",
   "permissions": [
     "webRequest", 

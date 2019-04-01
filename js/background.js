@@ -58,6 +58,7 @@ function registerBlocking(){
 }
 
 let blockTimeout = null
+const timeout = 120000 // start block after 120s (120000) for loading image, css ...
 function startBlocking(){
   clearBlockTimeout()
   blockTimeout = setTimeout(()=>{
@@ -67,7 +68,7 @@ function startBlocking(){
       ["blocking"]
     )
     clearBlockTimeout()
-  }, 3000) // start block after 120s (120000) for loading image, css ...
+  }, timeout)
 }
 
 function stopBlocking(){
@@ -85,7 +86,8 @@ function clearBlockTimeout(){
 function isAllow(details){
     for (let index = 0; index < allowUrlPatterns.length; index++) {
         const pattern = allowUrlPatterns[index]
-        if(details.url.indexOf(pattern) !== -1) return true
+        const isUrlContainsAllowPattern = details.url.indexOf(pattern) !== -1
+        if(isUrlContainsAllowPattern) return true
     }
     return false
 }
